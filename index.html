@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#faf6ef">
+<title>LIEVITA!</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="splash">
+  <div class="stage">
+    <button id="heart" aria-label="Entra"><svg viewBox="0 -50 200 235" aria-hidden="true"><path d="M100 182 C40 135 12 98 12 66 C12 40 32 24 56 24 C76 24 92 34 100 50 C108 34 124 24 144 24 C168 24 188 40 188 66 C188 98 160 135 100 182Z" fill="#d62839"/></svg></button>
+    <svg class="wheat" viewBox="0 -50 200 235" aria-hidden="true"><g fill="#e6b94a" stroke="#a87a14" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" transform="translate(0 72) translate(100 28) rotate(50) scale(1.15) translate(-100 -28)"><defs><g id="gs"><path d="M0 0 C7 -6 7 -17 0 -27 C-7 -17 -7 -6 0 0Z"/><path d="M0 -27 L0 -43" fill="none" stroke-width="1.6"/></g></defs><path d="M100 100 Q98 50 100 -2" fill="none" stroke-width="3"/><use href="#gs" transform="translate(100 78) rotate(-34)"/><use href="#gs" transform="translate(100 68) rotate(34)"/><use href="#gs" transform="translate(100 58) rotate(-34)"/><use href="#gs" transform="translate(100 48) rotate(34)"/><use href="#gs" transform="translate(100 38) rotate(-34)"/><use href="#gs" transform="translate(100 28) rotate(34)"/><use href="#gs" transform="translate(100 18) rotate(-34)"/><use href="#gs" transform="translate(100 8) rotate(34)"/><use href="#gs" transform="translate(100 -2)"/></g></svg>
+  </div>
+  <h1>LIEVITA!</h1>
+  <p class="brand">LilliLab</p>
+</div>
+
+<div id="app">
+<header>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="rinfresco" aria-selected="true">Rinfresco</button>
+    <button role="tab" data-tab="impasto" aria-selected="false">Impasto</button>
+    <button role="tab" data-tab="frigo" aria-selected="false">Frigo</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= RINFRESCO ================= -->
+<section id="tab-rinfresco" class="panel">
+  <div class="field">
+    <label>Tipo di lievito</label>
+    <div class="seg" data-bind="sh.tipo">
+      <button data-v="pm">PM solida</button><button data-v="lico">li.co.li.</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>Temperatura: <b data-out="r.T">24</b> °C</label>
+    <input type="range" min="20" max="27" step="1" data-bind="r.T">
+  </div>
+  <div class="field">
+    <div class="seg small" data-bind="r.tempoModo">
+      <button data-v="ore">Ore</button><button data-v="orario">Orario in cui lo uso</button>
+    </div>
+    <div data-show="r.tempoModo=ore"><label>Ore di attesa</label><input type="number" inputmode="decimal" step="0.5" min="0" data-bind="r.ore"></div>
+    <div data-show="r.tempoModo=orario"><label>Lo voglio usare alle</label><input type="time" data-bind="r.orario"><p class="hint" id="r-ore-calc"></p></div>
+  </div>
+  <div class="field">
+    <label>Cosa vuoi fare</label>
+    <div class="seg" data-bind="r.modo">
+      <button data-v="voglio">Voglio ottenere X g</button><button data-v="ho">Ho X g di lievito</button>
+    </div>
+    <div data-show="r.modo=voglio"><label>Lievito che voglio ottenere (g)</label><input type="number" inputmode="decimal" min="0" data-bind="r.tot"></div>
+    <div data-show="r.modo=ho"><label>Lievito che ho (g)</label><input type="number" inputmode="decimal" min="0" data-bind="r.b"></div>
+  </div>
+
+  <div class="warns" id="r-warn"></div>
+  <div class="result">
+    <div class="big"><span>Lievito</span><b id="r-lievito">–</b></div>
+    <div class="big"><span>Farina</span><b id="r-farina">–</b></div>
+    <div class="big"><span>Acqua</span><b id="r-acqua">–</b></div>
+    <div class="total">Totale finale <b id="r-totale">–</b> · rapporto <b id="r-rapporto">–</b></div>
+  </div>
+</section>
+
+<!-- ================= IMPASTO ================= -->
+<section id="tab-impasto" class="panel" hidden>
+  <div class="row2">
+    <div class="field"><label>Farina totale (g)</label><input type="number" inputmode="decimal" min="0" data-bind="sh.F"></div>
+    <div class="field"><label>Idratazione (%)</label><input type="number" inputmode="decimal" min="0" data-bind="sh.H"></div>
+  </div>
+  <div class="field"><label>Sale (%)</label><input type="number" inputmode="decimal" step="0.1" min="0" data-bind="sh.s"></div>
+  <div class="field">
+    <label>Tipo di lievito</label>
+    <div class="seg" data-bind="sh.tipo">
+      <button data-v="pm">PM solida</button><button data-v="lico">li.co.li.</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>Temperatura dell'impasto: <b data-out="i.T">24</b> °C</label>
+    <input type="range" min="20" max="27" step="1" data-bind="i.T">
+  </div>
+  <div class="field">
+    <label>Prima lievitazione</label>
+    <div class="seg small" data-bind="i.tempoModo">
+      <button data-v="ore">Ore</button><button data-v="orario">Orario di fine</button>
+    </div>
+    <div data-show="i.tempoModo=ore"><input type="number" inputmode="decimal" step="0.5" min="0" data-bind="i.ore" aria-label="Ore"></div>
+    <div data-show="i.tempoModo=orario"><input type="time" data-bind="i.orario" aria-label="Orario di fine"><p class="hint" id="i-ore-calc"></p></div>
+  </div>
+
+  <div class="warns" id="i-warn"></div>
+  <div class="result">
+    <div class="big"><span>Lievito madre</span><b id="i-lievito">–</b><small id="i-perc"></small></div>
+    <div class="big"><span>Farina da aggiungere</span><b id="i-farina">–</b></div>
+    <div class="big"><span>Acqua da aggiungere</span><b id="i-acqua">–</b></div>
+    <div class="big"><span>Sale</span><b id="i-sale">–</b></div>
+  </div>
+  <button class="primary" data-prepara="i">Prepara questo lievito</button>
+</section>
+
+<!-- ================= FRIGO ================= -->
+<section id="tab-frigo" class="panel" hidden>
+  <div class="row2">
+    <div class="field"><label>Farina totale (g)</label><input type="number" inputmode="decimal" min="0" data-bind="sh.F"></div>
+    <div class="field"><label>Idratazione (%)</label><input type="number" inputmode="decimal" min="0" data-bind="sh.H"></div>
+  </div>
+  <div class="field"><label>Sale (%)</label><input type="number" inputmode="decimal" step="0.1" min="0" data-bind="sh.s"></div>
+  <div class="field">
+    <label>Tipo di lievito</label>
+    <div class="seg" data-bind="sh.tipo">
+      <button data-v="pm">PM solida</button><button data-v="lico">li.co.li.</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>Temperatura ambiente: <b data-out="f.Ta">24</b> °C</label>
+    <input type="range" min="20" max="27" step="1" data-bind="f.Ta">
+  </div>
+  <div class="field">
+    <label>Ore fuori dal frigo, prima di metterlo in frigo</label>
+    <input type="number" inputmode="decimal" step="0.5" min="0" data-bind="f.ta">
+  </div>
+  <div class="field">
+    <label>Tempo in frigo</label>
+    <div class="seg small" data-bind="f.modo">
+      <button data-v="ore">Ore</button><button data-v="orari">Dagli orari</button>
+    </div>
+    <div data-show="f.modo=ore"><input type="number" inputmode="decimal" step="0.5" min="0" data-bind="f.tf" aria-label="Ore in frigo"></div>
+    <div data-show="f.modo=orari">
+      <label>Inizio impasto</label><input type="datetime-local" data-bind="f.inizio">
+      <label>Inforno alle</label><input type="datetime-local" data-bind="f.inforno">
+      <p class="hint" id="f-ore-calc"></p>
+    </div>
+  </div>
+
+  <div class="warns" id="f-warn"></div>
+  <div class="result">
+    <div class="big"><span>Lievito madre</span><b id="f-lievito">–</b><small id="f-perc"></small></div>
+    <div class="big"><span>Farina da aggiungere</span><b id="f-farina">–</b></div>
+    <div class="big"><span>Acqua da aggiungere</span><b id="f-acqua">–</b></div>
+    <div class="big"><span>Sale</span><b id="f-sale">–</b></div>
+    <div class="total" id="f-riepilogo"></div>
+  </div>
+  <p class="hint" id="f-nota">Con il frigo il calcolo è indicativo finché non hai fatto una taratura (Impostazioni avanzate)</p>
+  <button class="primary" data-prepara="f">Prepara questo lievito</button>
+</section>
+
+<!-- ================= IMPOSTAZIONI ================= -->
+<details class="adv">
+  <summary>Impostazioni avanzate</summary>
+  <div class="advbody">
+    <label class="check"><input type="checkbox" id="set-splash"> Mostra schermata iniziale</label>
+    <div id="params"></div>
+    <button id="reset">Ripristina valori predefiniti</button>
+
+    <h3>Taratura guidata</h3>
+
+    <div class="calib">
+      <h4>Tara il rinfresco</h4>
+      <p class="hint">Annota quando il lievito è al massimo della crescita, prima che cominci a scendere.</p>
+      <div class="row2">
+        <label>Lievito (g)<input type="number" inputmode="decimal" data-cal="tr.lievito"></label>
+        <label>Farina (g)<input type="number" inputmode="decimal" data-cal="tr.farina"></label>
+        <label>Acqua (g)<input type="number" inputmode="decimal" data-cal="tr.acqua"></label>
+        <label>Temperatura (°C)<input type="number" inputmode="decimal" data-cal="tr.T"></label>
+        <label>Ore fino al picco<input type="number" inputmode="decimal" step="0.5" data-cal="tr.ore"></label>
+      </div>
+      <p class="calres" id="tr-res"></p>
+      <button id="tr-save" hidden>Salva</button>
+    </div>
+
+    <div class="calib">
+      <h4>Tara l'impasto</h4>
+      <p class="hint">Annota quando l'impasto era pronto.</p>
+      <div class="row2">
+        <label>Peso impasto totale (g)<input type="number" inputmode="decimal" data-cal="ti.impasto"></label>
+        <label>Lievito madre (g)<input type="number" inputmode="decimal" data-cal="ti.lievito"></label>
+        <label>Temperatura (°C)<input type="number" inputmode="decimal" data-cal="ti.T"></label>
+        <label>Ore prima lievitazione<input type="number" inputmode="decimal" step="0.5" data-cal="ti.ore"></label>
+      </div>
+      <p class="calres" id="ti-res"></p>
+      <button id="ti-save" hidden>Salva</button>
+    </div>
+
+    <div class="calib">
+      <h4>Tara il frigo</h4>
+      <p class="hint">Annota quando l'impasto era pronto da infornare.</p>
+      <div class="row2">
+        <label>Peso impasto totale (g)<input type="number" inputmode="decimal" data-cal="tf.impasto"></label>
+        <label>Lievito madre (g)<input type="number" inputmode="decimal" data-cal="tf.lievito"></label>
+        <label>Temperatura ambiente (°C)<input type="number" inputmode="decimal" data-cal="tf.Ta"></label>
+        <label>Ore fuori dal frigo<input type="number" inputmode="decimal" step="0.5" data-cal="tf.ta"></label>
+        <label>Ore in frigo<input type="number" inputmode="decimal" step="0.5" data-cal="tf.tf"></label>
+      </div>
+      <p class="calres" id="tf-res"></p>
+      <button id="tf-save" hidden>Salva</button>
+    </div>
+  </div>
+</details>
+</main>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
