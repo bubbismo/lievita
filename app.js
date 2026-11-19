@@ -55,7 +55,13 @@ const fmt3 = (x) => x.toFixed(3).replace('.', ',');
 
 // ---------- binding ----------
 const STR_PATHS = new Set(['sh.tipo', 'r.tempoModo', 'r.modo', 'i.tempoModo', 'f.modo', 'r.orario', 'i.orario', 'f.inizio', 'f.inforno']);
+const DESC = {
+  rinfresco: "Calcola le dosi di lievito, farina e acqua da utilizzare per avere il lievito pronto all'ora giusta.",
+  impasto: "Calcola la quantità di lievito madre da utilizzare nell'impasto, perché la prima lievitazione finisca all'ora desiderata.",
+  frigo: "È come per la modalità Impasto, ma con una parte della lievitazione in frigorifero, per lievitazioni lunghe.",
+};
 function syncInputs() {
+  $('#tab-desc').textContent = DESC[state.tab];
   for (const el of $$('[data-bind]')) {
     const v = get(el.dataset.bind);
     if (el.classList.contains('seg')) {
